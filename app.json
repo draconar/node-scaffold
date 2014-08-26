@@ -1,0 +1,5 @@
+{
+  "name": "Node scaffold",
+  "description": "Reduces boilerplare code required",
+  "keywords": ["node", "express", "heroku", "grunt"]
+}
