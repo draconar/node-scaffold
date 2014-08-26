@@ -3,10 +3,11 @@ Node Scaffold
 
 A basic [Node](http://nodejs.org/), [Express](http://expressjs.com/), and [Grunt](http://gruntjs.com/) scaffold that is easily deployable on [Heroku](https://www.heroku.com/).
 
-Fork, npm install, and run!
+Fork, `npm install`, and run!
 
 Deploy on Heroku
 -------
+Follow these instructions to deploy your index.html page on Heroku.
 1. `grunt build`
 2. `cd dist`
 3. `git init` (first time only)
