@@ -1,3 +1,5 @@
+//THE ORDER OF THESE TASKS IS CRUCIAL. STUDY THE DOCS here... http://gruntjs.com/plugins
+
 'use strict';
 
 module.exports = function(grunt) {
@@ -10,7 +12,7 @@ module.exports = function(grunt) {
 
   grunt.initConfig({
 
-    // deletes everything in Dist, except any git files
+    // deletes everything in Dist, except any . files
     clean: {
       begin: {
         files: [{
@@ -34,12 +36,13 @@ module.exports = function(grunt) {
     concat: {
       dist: {
         src: [
-          // 'js/_main.js'
+          'js/main.js',
+          'js/secondary'
         ],
-        // dest: 'dist/js/final.js'
+        dest: 'dist/js/final.js'
       }
     },
-    // Stav this
+    // connects on the local server
     connect: {
       all: {
         options: {
@@ -54,12 +57,12 @@ module.exports = function(grunt) {
         }
       }
     },
-    // Copies all files
+    // Copies all files except '!______'
     copy: {
       main: {
         files: [{
           expand: true,
-          src: ['**', '!**/node_modules/**', '!**/dist/**', '!**/public/**'],
+          src: ['**', '!**/node_modules/**', '!**/dist/**'],
           dest: 'dist/'
         }, ]
       }
@@ -68,7 +71,7 @@ module.exports = function(grunt) {
     cssmin: {
       combine: {
         files: {
-          'dist/css/_________.css': ['dist/css/________.css', 'dist/css/________.css', 'dist/css/______.css']
+          'dist/css/final.css': ['dist/css/main.css', 'dist/css/secondary.css']
         }
       }
     },
@@ -92,7 +95,7 @@ module.exports = function(grunt) {
           minifyJS: true
         },
         files: {
-          'dist/________.html': 'dist/______.html'
+          'dist/index.html': 'dist/index.html'
         }
       }
     },
@@ -116,36 +119,41 @@ module.exports = function(grunt) {
     processhtml: {
       dist: {
         files: {
-          'dist/______.html': ['_______.html']
+          'dist/index.html': ['index.html']
         }
       }
     },
     // Watches files and runs tasks (as defined below)
     regarde: {
       all: {
-        files: ['index.html', 'css/**/*.css', 'js/**/*.js'],
+        files: ['index.html', 'css/**/*.css', 'css/**/*.scss', 'js/**/*.js'],
         tasks: ['livereload']
       }
     },
-    // Uglifies all CSS
-    uglify: {
-      my_target: {
+    sass: {
+      dist: {
         files: {
-          'dist/js/final.js': ['dist/js/final.js'],
-          'dist/js/mobile.js': ['dist/js/mobile.js']
+          'css/main.css': 'css/main.scss'
         }
       }
     },
-    // Removes any unused Css from key after analyzing value
+    // Uglifies all JS
+    uglify: {
+      dist: {
+        files: {
+          'dist/js/final.js': ['dist/js/final.js']
+        }
+      }
+    },
+    // Removes any unused CSS after analyzing HTML
     uncss: {
       dist: {
         files: {
-          'dist/css/tidymin.css': ['dist/index.html'],
-          'dist/css/mobile.css': ['dist/mobile.html'],
+          'dist/css/final.css': ['dist/index.html']
         }
       }
     },
-
+    // used to watch and livereload
     watch: {
       all: {
         files: 'index.html',
@@ -173,7 +181,7 @@ module.exports = function(grunt) {
     'copy'
   ]);
   grunt.registerTask('test', [
-
+    'sass'
   ]);
 
 };
