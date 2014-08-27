@@ -1,6 +1,8 @@
 body {
-  background-color: #EEE;
-}
-body h3 {
-  color: #333333;
-}
+  background-color: #EEE; }
+  body h3 {
+    color: #333333; }
+
+img {
+  width: 500px;
+  height: 350px; }

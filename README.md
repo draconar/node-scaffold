@@ -20,4 +20,4 @@ Follow these instructions to deploy your index.html page on Heroku.
 
 Watch changes
 -------
-After `npm install` you can livereload your project using `grunt serve` or `grunt dist` to examine the dist/index.html
+After `npm install` you can livereload your project using `grunt serve` or `grunt dist` (to examine dist/index.html)

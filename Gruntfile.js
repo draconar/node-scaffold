@@ -62,7 +62,7 @@ module.exports = function(grunt) {
       main: {
         files: [{
           expand: true,
-          src: ['**', '!**/node_modules/**', '!**/dist/**'],
+          src: ['**', '!**/node_modules/**', '!**/dist/**', '!Gruntfile.js', '!README.md'],
           dest: 'dist/'
         }, ]
       }
@@ -127,7 +127,7 @@ module.exports = function(grunt) {
     regarde: {
       all: {
         files: ['index.html', 'css/**/*.css', 'css/**/*.scss', 'js/**/*.js'],
-        tasks: ['livereload']
+        tasks: ['livereload', 'sass']
       }
     },
     sass: {
@@ -166,7 +166,9 @@ module.exports = function(grunt) {
 
   // register all the tasks
   grunt.registerTask('serve', [
+
     'livereload-start',
+    'sass',
     'connect',
     'open',
     'regarde'
