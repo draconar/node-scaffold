@@ -1,18 +1,16 @@
-//THE ORDER OF THESE TASKS IS CRUCIAL. STUDY THE DOCS here... http://gruntjs.com/plugins
-
 'use strict';
 
 module.exports = function(grunt) {
 
-  // Load Grunt tasks declared in the package.json file
+  // https://www.npmjs.org/package/matchdep
   require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
 
-  // Times everything
+  // https://www.npmjs.org/package/time-grunt
   require('time-grunt')(grunt);
 
   grunt.initConfig({
 
-    // deletes everything in Dist, except any . files
+    // https://github.com/gruntjs/grunt-contrib-clean
     clean: {
       begin: {
         files: [{
@@ -27,22 +25,22 @@ module.exports = function(grunt) {
         files: [{
           dot: true,
           src: [
-            //place files here to delete from Dist at the end of the build
+            'dist/css/main.css', 'dist/css/main.scss', 'dist/css/normalize.css', 'dist/js/main.js', 'dist/js/secondary.js'
           ]
         }]
       }
     },
-    // concats all JS files into one final dest file
+    // https://github.com/gruntjs/grunt-contrib-concat
     concat: {
       dist: {
         src: [
-          'js/main.js',
-          'js/secondary'
+          'dist/js/main.js',
+          'dist/js/secondary.js'
         ],
         dest: 'dist/js/final.js'
       }
     },
-    // connects on the local server
+    // https://github.com/gruntjs/grunt-contrib-connect
     connect: {
       all: {
         options: {
@@ -57,7 +55,7 @@ module.exports = function(grunt) {
         }
       }
     },
-    // Copies all files except '!______'
+    // https://github.com/gruntjs/grunt-contrib-copy
     copy: {
       main: {
         files: [{
@@ -67,14 +65,15 @@ module.exports = function(grunt) {
         }, ]
       }
     },
-    // Minifies all CSS
+    // https://github.com/gruntjs/grunt-contrib-cssmin
     cssmin: {
       combine: {
         files: {
-          'dist/css/final.css': ['dist/css/main.css', 'dist/css/secondary.css']
+          'dist/css/final.css': ['dist/css/final.css']
         }
       }
     },
+    // https://github.com/blai/grunt-express
     express: {
       all: {
         options: {
@@ -85,7 +84,7 @@ module.exports = function(grunt) {
         }
       }
     },
-    // Minifies all HTML
+    // https://github.com/gruntjs/grunt-contrib-htmlmin
     htmlmin: {
       dist: {
         options: {
@@ -99,7 +98,7 @@ module.exports = function(grunt) {
         }
       }
     },
-    // Minifies all min (10-15% savings)
+    // https://github.com/gruntjs/grunt-contrib-imagemin
     imagemin: {
       dynamic: {
         files: [{
@@ -109,13 +108,13 @@ module.exports = function(grunt) {
         }]
       }
     },
-    // Opens the files
+    // https://github.com/jsoverson/grunt-open
     open: {
       all: {
         path: 'http://localhost:<%= connect.all.options.port%>'
       }
     },
-    // Processes comments within HTML (see here)
+    // https://www.npmjs.org/package/grunt-processhtml
     processhtml: {
       dist: {
         files: {
@@ -123,13 +122,14 @@ module.exports = function(grunt) {
         }
       }
     },
-    // Watches files and runs tasks (as defined below)
+    // https://www.npmjs.org/package/grunt-regarde
     regarde: {
       all: {
         files: ['index.html', 'css/**/*.css', 'css/**/*.scss', 'js/**/*.js'],
         tasks: ['livereload', 'sass']
       }
     },
+    // https://github.com/gruntjs/grunt-contrib-sass
     sass: {
       dist: {
         files: {
@@ -137,7 +137,7 @@ module.exports = function(grunt) {
         }
       }
     },
-    // Uglifies all JS
+    // https://github.com/gruntjs/grunt-contrib-uglify
     uglify: {
       dist: {
         files: {
@@ -145,7 +145,7 @@ module.exports = function(grunt) {
         }
       }
     },
-    // Removes any unused CSS after analyzing HTML
+    // https://github.com/addyosmani/grunt-uncss
     uncss: {
       dist: {
         files: {
@@ -153,7 +153,7 @@ module.exports = function(grunt) {
         }
       }
     },
-    // used to watch and livereload
+    // https://github.com/gruntjs/grunt-contrib-watch
     watch: {
       all: {
         files: 'index.html',
@@ -166,7 +166,6 @@ module.exports = function(grunt) {
 
   // register all the tasks
   grunt.registerTask('serve', [
-
     'livereload-start',
     'sass',
     'connect',
@@ -178,12 +177,28 @@ module.exports = function(grunt) {
     'open',
     'watch'
   ]);
+  // GRUNT BUILD REDUCES THE LOAD FROM 25.5KB/719MS to 1.1KB/398MS
   grunt.registerTask('build', [
+    // Sass, clean, and copy tasks
+    'sass',
     'clean:begin',
-    'copy'
+    'copy',
+    // JS focused tasks
+    'concat',
+    'uglify',
+    // CSS focused tasks (grunt sass already executed)
+    'uncss',
+    'cssmin',
+    // Image focused tasks
+    'imagemin',
+    // HTML focused tasks
+    'processhtml',
+    'htmlmin',
+    // Final cleanup tasks
+    'clean:end'
   ]);
   grunt.registerTask('test', [
-    'sass'
+
   ]);
 
 };
